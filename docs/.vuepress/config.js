@@ -18,7 +18,11 @@ module.exports = {
     ],
     sidebar: {
       '/jsnotes/': [
-        ''
+        '',
+        'js-type-change',
+        'js-getter-setter',
+        'js-has-property',
+        'js-reg-lastindex'
       ],
       '/cssnotes/': [
         '',

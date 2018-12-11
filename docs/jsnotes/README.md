@@ -1,2 +1,1 @@
-
-## this is a js page!
+# JavaScript
