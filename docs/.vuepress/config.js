@@ -1,5 +1,6 @@
 module.exports = {
   base: `/myBlog/`,
+  dest: './dist',
   title: 'Lei的博客',
   description: '每天都要有进步，学无止境，永不停步！',
   serviceWorker: true,
