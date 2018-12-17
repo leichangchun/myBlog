@@ -46,10 +46,11 @@ module.exports = {
       ],
       '/cssnotes/': [
         '',
-        'css-skills',
         'css-in-center',
         'css-rem',
         'css-slideshow',
+        'css-propertys',
+        'css-skills',
         'css-questions'
       ],
       '/doms/': [
