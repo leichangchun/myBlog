@@ -35,6 +35,7 @@ module.exports = {
     sidebar: {
       '/jsnotes/': [
         '',
+        'js-this',
         'js-deepcopy',
         'js-obj-extend',
         'js-type-change',
