@@ -92,7 +92,7 @@ temp赋值后，虽然和`obj.say`是同一个函数体，但是确实普通函�
     function _Person(name) {
         this.name = name;
         _temp = this; // 暂存this
-        return {
+        return { // 返回指定的对象
             name:'name999'
         }
     }
@@ -100,4 +100,30 @@ temp赋值后，虽然和`obj.say`是同一个函数体，但是确实普通函�
     let _x = new _Person('name2');
     console.log(_x === _temp); // false
 ```
+在构造函数中返回指定的对象，此时的this就不会指向最后生成的对象
+
+## 事件处理函数
+
+在作为DOM的事件处理函数时，`this`指向触发事件的元素
+
+``` js
+    let btn = document.querySelector('#target');
+
+    btn.addEventListener('click', function(e){
+        console.log(this === e.currentTarget); 
+    },false)
+```
+触发事件时，会输出`true`,可见`this`指向了触发元素
+
+## 设置this指向
+
+`JavaScript`中有多个方式可以显示的设定所需的`this`值。
+
+### call()和 apply()
+
+
+### bind()
+
+
+### 箭头函数
 
