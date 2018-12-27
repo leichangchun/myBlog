@@ -17,10 +17,9 @@ module.exports = {
       {
         text: 'CSS',
         link: '/cssnotes/'
-      },
-      {
-        text: '场景实例',
-        link: '/demos/'
+      },{
+        text:'面试题集',
+        link:'/interview/'
       },
       {
         text: '其他',
@@ -28,6 +27,10 @@ module.exports = {
           {
             text: 'DOM',
             link: '/doms/'
+          },
+          {
+            text: '场景实例',
+            link: '/demos/'
           }
         ]
       }
@@ -40,9 +43,9 @@ module.exports = {
         'js-obj-extend',
         'js-type-judgement',
         'js-type-autochange',
+        'js-getter-setter',
         'js-travesal',
         'js-remove-arrayrepeat',
-        'js-getter-setter',
         'js-has-property',
         'js-reg-lastindex'
       ],
@@ -50,7 +53,6 @@ module.exports = {
         '',
         'css-in-center',
         'css-rem',
-        'css-slideshow',
         'css-propertys',
         'css-skills',
         'css-questions'
@@ -65,10 +67,14 @@ module.exports = {
         '',
         'demo-input-upload',
         'demo-img-lazyload',
+        'demo-css-slideshow',
         'demo-node-crawler',
         'demo-img-loading',
         'demo-img-map',
         'demo-fullscreen'
+      ],
+      '/interview/':[
+        ''
       ]
     }
   },

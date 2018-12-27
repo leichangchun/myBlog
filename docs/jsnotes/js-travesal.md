@@ -134,4 +134,3 @@ for (let i of iterable) {
   console.log(i); // logs 3, 5, 7
 }
 ```js
-<!-- TODO: 补充其他的遍历方法 -->

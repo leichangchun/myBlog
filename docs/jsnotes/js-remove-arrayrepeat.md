@@ -70,7 +70,6 @@ function unique2(target) {   //indexof简化内层循环
     }
 ```
 由于对象的键都是字符，所以，**无法区分 1 和  '1'** ，所以需要再进行修改一下，存放时加上类型判断。
-<!-- TODO:补上一篇数据类型判断相关的文档 -->
 ```js
     function unique4(target) {  //对象键值的方式
       var obj = {};
