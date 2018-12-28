@@ -51,11 +51,11 @@ module.exports = {
       ],
       '/cssnotes/': [
         '',
-        'css-in-center',
-        'css-rem',
-        'css-propertys',
+        'css-questions',
         'css-skills',
-        'css-questions'
+        'css-propertys',
+        'css-in-center',
+        'css-rem'
       ],
       '/doms/': [
         '',

@@ -2,20 +2,7 @@
 
  此页记录遇到过的css问题及处理方式
 
-## cacl()函数中使用scss变量不生效的问题
-
-使用cacl()动态计算元素的高度，运算中包含一个scss变量 `height: calc(100% - $ws-header-height);` , 在浏览器中发现并没有达到预期效果，scss变量没有被解析。
-
-<div class="img-center">
-    <img src="./img/cacl-not-resolve.png">  
-</div>
-
-**使用scss的插值语句 `#{}`** ,  `height: calc(100% - #{$ws-header-height});`  就在浏览器中正常解析了。
-
-<div class="img-center">
-    <img src="./img/cacl-ok.png">  
-</div>
-
+## 属性设置百分比时的计算参考标准
 
 ## absolute和relative元素 设置百分比宽高的差异
 一般元素在页面所占的空间包括：**magin border padding content**。以前一直以为子元素设置百分比宽高都是以父元素的**content**值为基准计算的。==但是当子元素的position不同时，却是不同的结果==。
@@ -68,5 +55,27 @@
 
 　　relative元素的百分比宽高 计算时按照的包含块的 content 的值算的.
 :::
+
+
+## cacl()函数中使用scss变量不生效的问题
+
+使用cacl()动态计算元素的高度，运算中包含一个scss变量 `height: calc(100% - $ws-header-height);` , 在浏览器中发现并没有达到预期效果，scss变量没有被解析。
+
+<div class="img-center">
+    <img src="./img/cacl-not-resolve.png">  
+</div>
+
+**使用scss的插值语句 `#{}`** ,  `height: calc(100% - #{$ws-header-height});`  就在浏览器中正常解析了。
+
+<div class="img-center">
+    <img src="./img/cacl-ok.png">  
+</div>
+
+## 父元素opacity属性对子元素的影响
+
+## img 为什么会撑开空白边距
+
+## input 的默认宽度问题
+
 
 <!-- TODO: 总结其他的css问题 -->
