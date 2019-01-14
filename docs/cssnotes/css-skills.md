@@ -69,7 +69,20 @@
     <img src="./img/inner-raduis-2.png">
 </div>
 
-## 1px 边框
-// TODO: 了解不同dpr模拟方案，完成这一部分
+## 文字模糊
 
+实现这种效果
+
+<div class="img-center">
+    <img src="./img/text-mask.png">
+</div>
+
+```css
+    .blurry-text{
+        color: transparent;
+        text-shadow: 0 0 5px rgba(114, 69, 69, 0.5);
+    }
+```
+
+文字颜色设置为`transparent`，然后使用`text-shadow`来实现文字轮廓模糊效果
 
