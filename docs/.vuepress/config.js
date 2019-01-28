@@ -38,6 +38,7 @@ module.exports = {
     sidebar: {
       '/jsnotes/': [
         '',
+        'js-dom-css',
         'js-this',
         'js-deepcopy',
         'js-obj-extend',
@@ -55,6 +56,7 @@ module.exports = {
         'css-skills',
         'css-propertys',
         'css-in-center',
+        'css-selectors',
         'css-rem'
       ],
       '/doms/': [
