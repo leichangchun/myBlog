@@ -100,3 +100,33 @@ console.log(a) {temp:4,valueOf: f ()}
         return this.split('').jion(' ');
     }
 ```
+
+## 判断以下代码的执行结果
+
+[掘金](https://juejin.im/post/5c6a0fa451882562851b3cdd) 上看到的一个笔试题目，记录并分析总结以下考察点。
+
+```js
+  function Foo () {
+    getName = function () { alert(1) }
+    return this
+  }
+  Foo.getName = function () { alert(2) }
+  
+  Foo.prototype.getName = function () { alert(3) }
+
+  var getName = function () { alert(4) }
+
+  function getName () { alert(5) }
+
+//判断输出结果
+  Foo.getName(); // 2
+  getName(); // 4
+  Foo().getName(); // 1
+  getName(); // 1
+
+    // TODO: 运算符优先级问题 正确答案应该是 2 3 3
+  new Foo.getName(); // 2
+  new Foo().getName(); // 2
+  new new Foo().getName(); 2
+```
+
