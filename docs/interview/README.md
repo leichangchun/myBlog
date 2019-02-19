@@ -126,7 +126,7 @@ console.log(a) {temp:4,valueOf: f ()}
 
   new Foo.getName(); // 2
   new Foo().getName(); // 3
-  new new Foo().getName(); 3
+  new new Foo().getName(); //3
 ```
 
 第一个 不用说什么，直接调用Foo构造函数的getName属性，输出2。
