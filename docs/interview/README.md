@@ -101,7 +101,7 @@ console.log(a) {temp:4,valueOf: f ()}
     }
 ```
 
-## 判断以下代码的执行结果
+## 判断以下代码的执行结果（涉及变量提升，函数声明，原型链，this指向，作用域等知识点）
 
 [掘金](https://juejin.im/post/5c6a0fa451882562851b3cdd) 上看到的一个笔试题目，记录并分析总结以下考察点。
 
@@ -113,7 +113,7 @@ console.log(a) {temp:4,valueOf: f ()}
   Foo.getName = function () { alert(2) }
   
   Foo.prototype.getName = function () { alert(3) }
-
+    
   var getName = function () { alert(4) }
 
   function getName () { alert(5) }
@@ -124,9 +124,32 @@ console.log(a) {temp:4,valueOf: f ()}
   Foo().getName(); // 1
   getName(); // 1
 
-    // TODO: 运算符优先级问题 正确答案应该是 2 3 3
   new Foo.getName(); // 2
-  new Foo().getName(); // 2
-  new new Foo().getName(); 2
+  new Foo().getName(); // 3
+  new new Foo().getName(); 3
 ```
 
+第一个 不用说什么，直接调用Foo构造函数的getName属性，输出2。
+
+第二个 调用当前作用域下的getName函数，要注意**函数表达式**和**函数声明**的不同：
+1. 函数声明会‘被提前’到外部脚本或者外部函数的顶部，所以这种方式声明的函数，可以在它被定义之前的代码中所调用。
+2. 函数表达式，就和声明变量一样了，变量声明会提前到顶部，但是赋值会在执行到原位置的时候才进行。
+4会变量提升，但是并没有赋值，然后5函数提升（在4赋值之前调用下getName()，输出的是5），而代码执行4的位置时，会赋值就覆盖了5。所以第二个会输出4。
+
+第三个 Foo()执行时，Foo函数体内并没有getName变量，所以就去上一层window下找，重新赋值了window下的getName为输出1（如果没有找到，会在window下创建一个getName），然后返回了this，这里的this指向的是window，再调用window的getName属性，即为重新赋值后的输出1。
+
+第四个 执行当前作用域下的getName,注意此时getName已经重新赋值，所以输出1
+
+第五个 这里需要特别注意表达式的执行顺序，详见 [MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Operator_Precedence#Table)
+
+<div class="img-center">
+    <img src="./img/interview-operate-01.png">
+</div>
+
+`.`比`无参数列表new`执行的优先级高，所以是 `new (Foo.getName)()` 输出2
+
+第六个 同样是执行顺序
+`()`比`.`的执行优先级高，所以是 `(new Foo()).getName()`,Foo作为构造函数，指定了返回this，而在构造函数中，this指向的是生成的实例，而Foo中没有对实例添加getName属性，所以在调用实例的getName时，会去Foo.prototype中找，所以输出3
+
+第七个 同样是执行顺序
+`new ((new Foo()).getName)()` 是以原型链上的getName为构造函数来执行，输出3
