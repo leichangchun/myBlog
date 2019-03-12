@@ -90,17 +90,6 @@ console.log(a) {temp:4,valueOf: f ()}
 1. `1==2`返回`false`
 2. `false==0`会发生类型转换，`false`自动转换成`0`再进行比较，返回`true`
 
-## 定义一个函数，实现将接收的字符串用空格隔开的功能，并让字符串可以直接调用
-
-处理字符串/数组主要考察的是字符串/数组相关方法的掌握情况。
-让字符串可以直接调用，就要注意 原型`prototype`和原型链的相关知识，将函数定义在`String`的原型上，这样所有的字符串都可以通过原型链找到该方法。
-
-```js
-    String.prototype.seperate = function(){
-        return this.split('').jion(' ');
-    }
-```
-
 ## 判断以下代码的执行结果（涉及变量提升，函数声明，原型链，this指向，作用域等知识点）
 
 [掘金](https://juejin.im/post/5c6a0fa451882562851b3cdd) 上看到的一个笔试题目，记录并分析总结以下考察点。
@@ -153,3 +142,40 @@ console.log(a) {temp:4,valueOf: f ()}
 
 第七个 同样是执行顺序
 `new ((new Foo()).getName)()` 是以原型链上的getName为构造函数来执行，输出3
+
+## 算法题目记录 - 多维数组扁平化并去重排序
+
+> **已知如下数组：** 
+  `var arr = [ [1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14] ] ] ], 10];`
+  编写一个程序将数组扁平化去并除其中重复部分数据，最终得到一个升序且不重复的数组
+
+1. 扁平化有多种方式：可以将多维数组转化为字符串，然后再`split`为字符串数组 `arr.toString().split(',')` , `new Set(arr)` ； 也可以利用 `Array.flat()` ，这个实验中的 [方法](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/flat) `arr.flat(Infinity)`。
+
+2. 去重 ： 可以利用`Set`的[特性](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Set)(Set中的元素只会出现一次，即 Set 中的元素是唯一的)，然后再通过 `Array.from()` 将Set 转换为数组 , 同时`Number`将字符串转换为数字
+
+3. 排序 `Array.sort()`没的说
+
+<div class="img-center">
+    <img src="./img/array-sort-01.png">
+</div>
+
+所以如下：
+
+```js
+    let arr =  [ [1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14] ] ] ], 10],
+        result;
+    
+    result = Array.from(new Set(arr.toString().split(',')) , Number).sort( (a,b) => a - b)
+    // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+```
+
+## 定义一个函数，实现将接收的字符串用空格隔开的功能，并让字符串可以直接调用
+
+处理字符串/数组主要考察的是字符串/数组相关方法的掌握情况。
+让字符串可以直接调用，就要注意 原型`prototype`和原型链的相关知识，将函数定义在`String`的原型上，这样所有的字符串都可以通过原型链找到该方法。
+
+```js
+    String.prototype.seperate = function(){
+        return this.split('').jion(' ');
+    }
+```
