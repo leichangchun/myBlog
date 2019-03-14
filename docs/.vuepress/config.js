@@ -46,6 +46,7 @@ module.exports = {
         'js-type-autochange',
         'js-getter-setter',
         'js-travesal',
+        'js-date',
         'js-remove-arrayrepeat',
         'js-has-property',
         'js-reg-lastindex'
