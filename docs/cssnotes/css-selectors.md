@@ -101,22 +101,21 @@ p {color:red}
 :checked | 表示任何处于选中状态的radio, checkbox 或("select") 元素中的option HTML元素("option") | 可利用 :checked伪类，让用户基于复选框的状态切换内容，而无需使用JavaScript
 :default | 表示一组相关元素中的默认表单元素 | 该选择器可以在 \< button>, \< input type="checkbox">, \< input type="radio">, 以及 \< option> 上使用
 :dir() | 匹配特定文字书写方向的元素 | :dir() 并不等于使用 \[ dir=… \] 属性选择器
-:disabled | 伪类表示任何被禁用的元素。 | 一个元素不能被激活（如选择、点击或接受文本输入）或获取焦点，则该元素处于被禁用状态。
+:disabled | 表示任何被禁用的元素。 | 一个元素不能被激活（如选择、点击或接受文本输入）或获取焦点，则该元素处于被禁用状态。
 :empty | 代表没有子元素的元素。 | 子元素只可以是元素节点或文本（包括空格）。注释或处理指令都不会产生影响。
 :enabled | 表示任何启用的元素。 | 如果一个元素能够被激活（如选择、点击或接受文本输入）或获取焦点，则该元素是启用的。
-:first-child | 表示在一组兄弟元素中的第一个元素。(选取属于其父元素的首个子元素) | 
-:first-of-type | 
-:fullscreen | 
-:focus | 
-:hover | 
-:indeterminate | 
-:in-range | 
-:invalid | 
-:lang() | 
-:last-child | 
-:last-of-type | 
-:left | 
-:link | 
+:first-child | 表示在一组兄弟元素中的第一个元素。(选取属于其父元素的首个子元素) | `E:first-child ` **E 要是其父元素的第一个子元素才会被匹配，注意并不是匹配 E 的第一个子元素**
+:first-of-type | 表示一组兄弟元素中**其类型的第一个元素** | 要注意和 :first-child的区别，`E:first-of-type`匹配的是父元素的第一个 E类型 的元素
+:fullscreen | 应用于当前处于全屏显示模式的元素。| Webkit和Gecko：:-webkit-full-screen 和:-moz-full-screen。Edge和Internet Explorer各自使用标准语法：:fullscreen和:-ms-fullscreen。
+:focus | 表示获得焦点的元素（如表单输入） | 此伪类仅适用于焦点元素本身。如果要选择包含焦点元素的元素，请使用:focus-within 
+:focus-within | 表示一个元素获得焦点，或，该元素的后代元素获得焦点。换句话说，**元素自身或者它的某个后代**匹配:focus伪类。 | 该选择器非常有用，举个通俗的例子：当用户在表单中某个\< input > 域上获得焦点，会高亮整个表单。
+:hover | 适用于用户使用指示设备虚指一个元素（没有激活它）的情况。 | 在触摸屏上 :hover 有问题，基本不可用
+:indeterminate | 表示状态不确定的表单元素 | \< input type="checkbox"> 元素，其 indeterminate 属性被 JavaScript设置为 true 。 ; \< input type="radio"> 元素, 表单中拥有相同 name值的所有单选按钮都未被选中时;处于不确定状态的 \< progress> 元素
+:in-range | 代表一个 \< input> 元素，其当前值**处于属性min 和max 限定的范围之内**;该伪类用于给用户一个可视化的提示，表示输入域的当前值处于允许范围内。 | 该伪类仅适用于那些拥有（或可以接受）取值范围设定的元素。若缺少此类设定，元素值就无所谓“in-range”和“out-range”。
+:invalid | 表示任意内容未通过验证的 \< input> 或其他 \< form> 元素  |  应该是对配置了校验规则的表单有效
+:last-child | 代表父元素的最后一个子元素 | 用法和实例参考:first-child
+:last-of-type | 表示了在（它父元素的）子元素列表中，**最后一个给定类型的元素** | 和`:first-of-type`同样的用法
+:link | 用来选中元素当中的链接 | 它将会选中所有尚未访问的链接，包括那些已经给定了其他伪类选择器的链接（例如:hover选择器，:active选择器，:visited选择器）。为了可以正确地渲染链接元素的样式，:link伪类选择器应当放在其他伪类选择器的前面，并且遵循LVHA的先后顺序，即：:link — :visited — :hover — :active。
 :not() | 
 :nth-child() | 
 :nth-last-child() | 
@@ -125,7 +124,7 @@ p {color:red}
 :only-child | 
 :only-of-type | 
 :optional | 
-:out-of-range | 
+:out-of-range | 表示一个 \< input> 元素，其当前值**处于属性 min 和 max 限定的范围外**。 | 该伪类用于给用户一个可视化的提示，表示输入域的当前值处于允许范围外。
 :read-only | 
 :read-write | 
 :required | 
@@ -140,8 +139,40 @@ p {color:red}
 
 #### :first-child 例子
 ```html
-
+    <p>body > p 0，我会生效</p>
+    <div>
+        <p>div > p 0，我会生效</p>
+        <p>div > p 1</p>
+    </div>
+    <div>
+        <span>div > span 0，我不会生效，我不是p元素</span>
+        <p>div > p 1，我不会生效，我不是div的第一个子元素</p>
+        <p>div > p 2</p>
+    </div>
 ```
+```css
+    p:first-child{ color: red; }
+```
+此样式选择器匹配成功的条件是：**p**元素是**其父元素**的**第一个子元素**；
 
+<div class="img-center">
+    <img src="./img/css-selector-03.png">
+</div>
+
+#### :first-of-type
+```html
+    <p>body > p 0，我会生效,我是body的第一个p元素</p>
+    <div>
+        <span>div > span 0，我不会生效，我是span元素而不是p元素 </span>
+        <p>div > p 1，我会生效，我是div的第一个p元素</p>
+        <p>div > p 2，我不会生效，我不是第一个p元素</p>
+    </div>
+```
+```css
+    p:first-of-type{ color: red; }
+```
+<div class="img-center">
+    <img src="./img/css-selector-04.png">
+</div>
 
 ### 伪元素
