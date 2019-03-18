@@ -116,18 +116,18 @@ p {color:red}
 :last-child | 代表父元素的最后一个子元素 | 用法和实例参考:first-child
 :last-of-type | 表示了在（它父元素的）子元素列表中，**最后一个给定类型的元素** | 和`:first-of-type`同样的用法
 :link | 用来选中元素当中的链接 | 它将会选中所有尚未访问的链接，包括那些已经给定了其他伪类选择器的链接（例如:hover选择器，:active选择器，:visited选择器）。为了可以正确地渲染链接元素的样式，:link伪类选择器应当放在其他伪类选择器的前面，并且遵循LVHA的先后顺序，即：:link — :visited — :hover — :active。
-:not() | 
-:nth-child() | 
-:nth-last-child() | 
-:nth-last-of-type() | 
-:nth-of-type() | 
-:only-child | 
-:only-of-type | 
-:optional | 
+:not() | :not(X)，是以一个简单的以选择器X为参数的功能性标记函数。它匹配不符合参数选择器X描述的元素 | X不能包含另外一个否定选择器。
+:nth-child() | 首先找到所有当前元素的兄弟元素，然后按照位置先后顺序从1开始排序，选择的结果为第（an+b）个元素的集合（n=0，1，2，3...） | 关键字 even 表示偶数 ； 关键字 odd 表示奇数 ；特殊用法 span:nth-child(-n+3) 匹配前三个子元素中的span元素
+:nth-last-child() | 同`:nth-child()`的用法一样，不过是**从结尾处开始计数** | 
+:nth-last-of-type() | 基本上和 `:nth-of-type` 一样，只是它从结尾处反序计数，而不是从开头处
+:nth-of-type() | 这个选择器匹配那些在相同兄弟节点中的位置与模式 an+b 匹配的**相同元素** | 注意与`:nth-child()`的差别，这个计算个数的时候，只算相同类型的元素
+:only-child | 代表了属于某个父元素的唯一一个子元素 | 等效的选择器还可以写成 :first-child:last-child或者:nth-child(1):nth-last-child(1)
+:only-of-type | 代表了任意一个元素，这个元素没有其他相同类型的兄弟元素
+:optional | 表示任意没有required属性的 <input>，<select> 或  <textarea> 元素 | 它允许表单容易的展示可选字段并且渲染其外观。
 :out-of-range | 表示一个 \< input> 元素，其当前值**处于属性 min 和 max 限定的范围外**。 | 该伪类用于给用户一个可视化的提示，表示输入域的当前值处于允许范围外。
-:read-only | 
-:read-write | 
-:required | 
+:read-only |  表示元素不可被用户编辑的状态（如锁定的文本输入框）| 这个选择器不只是选择具有 readonly 属性的<input> 元素，它也会选择所有的不能被用户编辑的元素。
+:read-write | 代表一个元素（例如可输入文本的 input元素）可以被用户编辑 | 这个选择器不仅仅选择 <input> 元素，它也会选择所有可以被用户编辑的元素，例如设置了 contenteditable 属性的  <p> 元素。
+:required | 表示 任意 <input> 元素表示任意拥有required属性的 <input> 或 <textarea> 元素 |  它允许表单在提交之前容易的展示必填字段并且渲染其外观
 :right | 
 :root | 
 :scope | 
@@ -159,7 +159,7 @@ p {color:red}
     <img src="./img/css-selector-03.png">
 </div>
 
-#### :first-of-type
+#### :first-of-type 例子
 ```html
     <p>body > p 0，我会生效,我是body的第一个p元素</p>
     <div>
@@ -174,5 +174,122 @@ p {color:red}
 <div class="img-center">
     <img src="./img/css-selector-04.png">
 </div>
+
+#### :not  例子
+
+```html  
+    <div class="parent">
+        <p>第一行</p>
+        <p>第二行</p>
+        <p>第三行</p>
+        <p>第四行</p>
+    </div>
+```
+```css
+    p:not(:last-child){
+        border-bottom: 1px solid #ccc;
+    }
+```
+
+<div class="img-center">
+    <img src="./img/css-selector-05.png">
+</div>
+最后一个p元素不生效
+
+#### :nth-child() nth-last-child  例子
+
+```html  
+    <div class="parent">
+        <p>第一个p元素</p>
+        <p>第二个p元素</p>
+        <p>第三个p元素</p>
+        <p>第四个p元素</p>
+        <div>我是div元素</div>
+        <p>第五个p元素</p>
+        <p>第六个p元素</p>
+        <p>第七个p元素</p>
+    </div>
+```
+```css
+    p:nth-child(odd) {
+        color: red;
+    }
+
+    p:nth-child(3n + 1) {
+        font-weight: 600;
+    }
+
+    p:nth-child(-n + 3) {
+        text-decoration: underline;
+    }
+    p:nth-last-child(-n + 3) {
+        text-decoration: line-through;
+    }
+
+    .parent :nth-child(odd){
+        font-size:28px;
+    }
+```
+
+<div class="img-center">
+    <img src="./img/css-selector-06.png">
+</div>
+
+注意兄弟元素中有一个div元素，所以`p:nth-child(odd)`匹配时，第五个p元素没有生效，它对应的排序是第6位;**它的判断规则是，匹配第5个元素**，因为加了`p:` 而第五个是`div`,所以不会生效。
+
+而`.parent :nth-child(odd)`就会对`div`生效。
+
+`nth-child(-n + 3)`这种方式可以指定前三个元素；同理，`:nth-last-child(-n + 3)`这种方式可以指定后三个元素
+
+#### :nth-last-child() 例子
+
+```html  
+    <div class="parent">
+        <p>第一行</p>
+        <p>第二行</p>
+        <p>第三行</p>
+        <p>第四行</p>
+    </div>
+```
+```css
+    p:not(:last-child){
+        border-bottom: 1px solid #ccc;
+    }
+```
+
+<div class="img-center">
+    <img src="./img/css-selector-05.png">
+</div>
+最后一个p元素不生效
+
+#### :nth-child() nth-last-child  例子
+
+```html  
+    <div class="parent">
+        <p>第一个p元素</p>
+        <p>第二个p元素</p>
+        <div>我是第一个div元素</div>
+        <div>我是第二个div元素</div>
+        <p>第三个p元素</p>
+        <p>第四个p元素</p>
+        <div>我是第三个div元素</div>
+        <div>我是第四个div元素</div>
+    </div>
+```
+```css
+    p:nth-of-type(2),div:nth-of-type(2) {
+        color: red;
+    }
+
+    .parent :nth-of-type(odd){
+        font-size:28px;
+    }
+```
+
+<div class="img-center">
+    <img src="./img/css-selector-07.png">
+</div>
+
+`nth-of-type`是选中该类型的第几个 所以`.parent :nth-of-type(odd)`，div下面，奇数个p和奇数个的div都会生效。 如果是`.parent :nth-child(odd)`,则是奇数个子元素会生效，不会按照类型分别计算
 
 ### 伪元素
