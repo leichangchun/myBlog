@@ -123,11 +123,11 @@ p {color:red}
 :nth-of-type() | 这个选择器匹配那些在相同兄弟节点中的位置与模式 an+b 匹配的**相同元素** | 注意与`:nth-child()`的差别，这个计算个数的时候，只算相同类型的元素
 :only-child | 代表了属于某个父元素的唯一一个子元素 | 等效的选择器还可以写成 :first-child:last-child或者:nth-child(1):nth-last-child(1)
 :only-of-type | 代表了任意一个元素，这个元素没有其他相同类型的兄弟元素
-:optional | 表示任意没有required属性的 <input>，<select> 或  <textarea> 元素 | 它允许表单容易的展示可选字段并且渲染其外观。
+:optional | 表示任意没有required属性的 \< input>，\< select> 或  \< textarea> 元素 | 它允许表单容易的展示可选字段并且渲染其外观。
 :out-of-range | 表示一个 \< input> 元素，其当前值**处于属性 min 和 max 限定的范围外**。 | 该伪类用于给用户一个可视化的提示，表示输入域的当前值处于允许范围外。
-:read-only |  表示元素不可被用户编辑的状态（如锁定的文本输入框）| 这个选择器不只是选择具有 readonly 属性的<input> 元素，它也会选择所有的不能被用户编辑的元素。
-:read-write | 代表一个元素（例如可输入文本的 input元素）可以被用户编辑 | 这个选择器不仅仅选择 <input> 元素，它也会选择所有可以被用户编辑的元素，例如设置了 contenteditable 属性的  <p> 元素。
-:required | 表示 任意 <input> 元素表示任意拥有required属性的 <input> 或 <textarea> 元素 |  它允许表单在提交之前容易的展示必填字段并且渲染其外观
+:read-only |  表示元素不可被用户编辑的状态（如锁定的文本输入框）| 这个选择器不只是选择具有 readonly 属性的\< input> 元素，它也会选择所有的不能被用户编辑的元素。
+:read-write | 代表一个元素（例如可输入文本的 input元素）可以被用户编辑 | 这个选择器不仅仅选择 \< input> 元素，它也会选择所有可以被用户编辑的元素，例如设置了 contenteditable 属性的  \< p> 元素。
+:required | 表示 任意 \< input> 元素表示任意拥有required属性的 \< input> 或 \< textarea> 元素 |  它允许表单在提交之前容易的展示必填字段并且渲染其外观
 :right | 
 :root | 
 :scope | 
