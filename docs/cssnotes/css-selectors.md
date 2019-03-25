@@ -128,16 +128,14 @@ p {color:red}
 :read-only |  表示元素不可被用户编辑的状态（如锁定的文本输入框）| 这个选择器不只是选择具有 readonly 属性的\< input> 元素，它也会选择所有的不能被用户编辑的元素。
 :read-write | 代表一个元素（例如可输入文本的 input元素）可以被用户编辑 | 这个选择器不仅仅选择 \< input> 元素，它也会选择所有可以被用户编辑的元素，例如设置了 contenteditable 属性的  \< p> 元素。
 :required | 表示 任意 \< input> 元素表示任意拥有required属性的 \< input> 或 \< textarea> 元素 |  它允许表单在提交之前容易的展示必填字段并且渲染其外观
-:right | 
-:root | 
-:scope | 
-:target | 
-:valid | 
-:visited | 
+:root | 匹配文档树的根元素。对于 HTML 来说，:root 表示 \< html> 元素 | 除了优先级更高之外，与 html 选择器相同
+:target | 代表一个唯一的页面元素(目标元素)，其id 与当前URL片段匹配 | http://www.example.com/index.html#section2 --> \< section id="section2">Example</>
+:valid | 表示内容验证正确的\< input> 或其他 \< form> 元素 | 这能简单地将校验字段展示为一种能让用户辨别出其输入数据的正确性的样式
+:visited | 表示用户已访问过的链接 | 出于隐私原因，浏览器严格限制您可以使用此伪类应用哪些样式,[详见](https://developer.mozilla.org/zh-CN/docs/Web/CSS/:visited)
 
 下面是一些例子：
 
-#### :first-child 例子
+#### :first-child() 例子
 ```html
     <p>body > p 0，我会生效</p>
     <div>
@@ -159,7 +157,8 @@ p {color:red}
     <img src="./img/css-selector-03.png">
 </div>
 
-#### :first-of-type 例子
+#### :first-of-type() 例子
+
 ```html
     <p>body > p 0，我会生效,我是body的第一个p元素</p>
     <div>
@@ -175,7 +174,7 @@ p {color:red}
     <img src="./img/css-selector-04.png">
 </div>
 
-#### :not  例子
+#### :not()  例子
 
 ```html  
     <div class="parent">
@@ -194,9 +193,10 @@ p {color:red}
 <div class="img-center">
     <img src="./img/css-selector-05.png">
 </div>
+
 最后一个p元素不生效
 
-#### :nth-child() nth-last-child  例子
+#### :nth-child() nth-last-child()  例子
 
 ```html  
     <div class="parent">
@@ -260,9 +260,10 @@ p {color:red}
 <div class="img-center">
     <img src="./img/css-selector-05.png">
 </div>
+
 最后一个p元素不生效
 
-#### :nth-child() nth-last-child  例子
+#### :nth-of-type() 例子
 
 ```html  
     <div class="parent">
@@ -293,3 +294,10 @@ p {color:red}
 `nth-of-type`是选中该类型的第几个 所以`.parent :nth-of-type(odd)`，div下面，奇数个p和奇数个的div都会生效。 如果是`.parent :nth-child(odd)`,则是奇数个子元素会生效，不会按照类型分别计算
 
 ### 伪元素
+
+伪元素前缀是**两个冒号 (::)** ， 同样是添加到选择器后面去选择某个元素的某个部分。
+
+关键字 | 含义 | 备注
+::after | 用来创建一个伪元素，作为已选中元素的最后一个子元素 | 通常会配合`content`属性来为该元素添加装饰内容。这个虚拟元素**默认是行内元素**。
+::before | 创建一个伪元素，其将成为匹配选中的元素的第一个子元素 | 常通过 `content `属性来为一个元素添加修饰性的内容。此元素**默认为行内元素**。
+
