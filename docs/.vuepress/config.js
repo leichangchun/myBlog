@@ -39,6 +39,7 @@ module.exports = {
       '/jsnotes/': [
         '',
         'js-dom-css',
+        'js-scope',
         'js-this',
         'js-deepcopy',
         'js-obj-extend',
