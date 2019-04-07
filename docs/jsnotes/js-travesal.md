@@ -62,7 +62,7 @@ Array.prototype.slice.call(divList).forEach(function(element,index){
 })
 ```
 ## `for ··· in ··· ` /  `for ··· of ···`
-for...in 语句以任意顺序遍历一个对象的**可枚举属性**。对于每个不同的属性，语句都会被执行。每次迭代时，分配的是==属性名==　　
+for...in 语句以任意顺序遍历一个对象的**可枚举属性**。对于每个不同的属性，语句都会被执行。每次迭代时，分配的是==属性名==
 
 ```js
 let array2 = ['a','b','c']
@@ -79,6 +79,8 @@ for(variable  in obj1){   //variable 为属性名
   console.log(variable)   //name age
 }
 ```
+
+需要注意，array2和obj1继承自`Array.prototype`和`Object.prototype`的都是不可枚举属性，例如`toString`,所以`for in `不会迭代它们。而自己**新增在原型上的属性会迭代**。如果想过滤掉的话，可以使用`hasOwnProperty`来进行判断是否为自身的属性。
 
 ::: tip
 因为**迭代的顺序是依赖于执行环境**的，所以数组遍历不一定按次序访问元素。 因此当迭代那些访问次序重要的 arrays 时用整数索引去进行 for 循环 (或者使用 Array.prototype.forEach() 或 for...of 循环) 。

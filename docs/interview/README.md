@@ -2,6 +2,33 @@
 
 此页面记录一些看到过的面试题目及分析
 
+## 分号自动插入机制
+
+判断下以下代码的打印内容是什么？
+
+```js
+    function test () {
+        return 
+        {
+            a : 'test'
+        }
+    }
+
+    test()
+```
+
+这里不会返回对象，而是会返回`undefined`。因为JavaScript有自动插入分号的机制，用来修正有缺损的程序。这里因为返回值的表达式的开始部分与`return不`在同一行，所以在return后面插入了一个分号，导致返回了`undefined`。如下
+```js
+    return;
+    {
+        a : 'test'
+    }
+```
+把`{`放在`return`同一行就可以避免这个问题了。
+
+详细的插入说明，见MDN[文档](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Lexical_grammar#%E8%87%AA%E5%8A%A8%E5%88%86%E5%8F%B7%E8%A1%A5%E5%85%A8)
+
+
 ## 如何使`(a === 1 && a === 2 && a === 3)`返回`true`
 
 看见这个题目，第一反应就是在变量`a`取值时进行了一些改变，那就要用`getter`
