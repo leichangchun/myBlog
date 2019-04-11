@@ -66,7 +66,31 @@ temp赋值后，虽然和`obj.say`是同一个函数体，但是却是普通函�
     _obj.say(); // _obj
                 // 'qian'
 ```
-同样是同一个函数体，此处由`_obj`调用的，`this`指向`_obj`
+同样是同一个函数体，此处由`_obj`调用的，`this`指向`_obj`。
+
+再看一个多级属性引用的例子。
+
+```js
+    function say () {
+        console.log(this);
+        console.log(this.name);
+    }
+
+    let obj = {
+        name:'zhao',
+        say
+    }
+
+    let obj2 = {
+        name:'shun',
+        obj
+    }
+
+    obj2.obj.say(); // obj
+                    // 'zhao'
+```
+
+**对象属性引用链只有最后一层会影响调用位置**
 
 ## this没有作用域限制
 

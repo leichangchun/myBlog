@@ -38,16 +38,17 @@ module.exports = {
     sidebar: {
       '/jsnotes/': [
         '',
-        'js-dom-css',
+        'js-object-and-prototype',
         'js-scope',
         'js-this',
+        'js-date',
+        'js-dom-css',
         'js-deepcopy',
         'js-obj-extend',
         'js-type-judgement',
         'js-type-autochange',
         'js-getter-setter',
         'js-travesal',
-        'js-date',
         'js-remove-arrayrepeat',
         'js-has-property',
         'js-reg-lastindex'
