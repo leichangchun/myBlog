@@ -41,6 +41,7 @@ module.exports = {
         'js-object-and-prototype',
         'js-scope',
         'js-this',
+        'js-compose',
         'js-date',
         'js-dom-css',
         'js-deepcopy',
