@@ -31,6 +31,10 @@ module.exports = {
           {
             text: '场景实例',
             link: '/demos/'
+          },
+          {
+            text:'工具使用',
+            link: '/toolnotes/'
           }
         ]
       }
@@ -81,6 +85,10 @@ module.exports = {
       ],
       '/interview/':[
         ''
+      ],
+      '/toolnotes/':[
+        '',
+        'create-react-app'
       ]
     }
   },
