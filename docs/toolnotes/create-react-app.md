@@ -32,6 +32,7 @@
 ### eslint
 
 `package.json`文件中已经有了针对react的校验规则配置
+
 ```json
   "eslintConfig": {
     "extends": "react-app"
@@ -40,7 +41,7 @@
 
 ### vscode调试
 
-vscode编辑器调试可以添加以下配置
+vscode编辑器调试可以添加以下配置:
 
 ```json
 {
