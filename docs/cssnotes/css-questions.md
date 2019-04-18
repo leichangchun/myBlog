@@ -151,3 +151,11 @@ img等替换元素的baseline为 `margin`,而文字的baseline为`x`的下边沿
     font-size:0;
 }
 ```
+
+## 通过-webkit-transform:transition3d/translateZ开启GPU硬件加速的适用范围：
+
++ 使用很多大尺寸图片(尤其是PNG24图)进行动画的页面。
++ 页面有很多大尺寸图片并且进行了css缩放处理，页面可以滚动时。
++ 使用background-size:cover设置大尺寸背景图，并且页面可以滚动时。
++ 编写大量DOM元素进行CSS3动画时(transition/transform/keyframes/absTop&Left)。
++ 使用很多PNG图片拼接成CSS Sprite时。
