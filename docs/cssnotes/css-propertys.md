@@ -73,3 +73,14 @@
 ### 栗子
 
 ![demo2](./img/object-fit-001.png)
+
+## pointer-events
+
+> 指定在什么情况下 (如果有) 某个特定的图形元素可以成为鼠标事件的 target。
+
+它大部分的属性值都是针对SVG的。剩下的就只有`auto`和`none`了。
+
+### auto
+与pointer-events属性未指定时的表现效果相同，对于SVG内容，该值与visiblePainted效果相同
+### none
+**元素永远不会成为鼠标事件的target**。但是，当其后代元素的pointer-events属性指定其他值时，鼠标事件可以指向后代元素，在这种情况下，鼠标事件将在捕获或冒泡阶段触发父元素的事件侦听器。
