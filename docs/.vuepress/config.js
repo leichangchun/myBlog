@@ -90,7 +90,8 @@ module.exports = {
         '',
         'create-react-app',
         'redux-note-createStore',
-        'redux-note-combineReducers'
+        'redux-note-combineReducers',
+        'redux-note-applyMiddleware'
       ]
     }
   },
