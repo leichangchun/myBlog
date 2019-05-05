@@ -2,6 +2,25 @@
 
 此页面记录一些看到过的面试题目及分析
 
+## 如果处理移动端滑动穿透的问题
+
+在弹框弹起的时候，为document添加touchmove的监听函数，来阻止默认的滚动行为。在弹框收起的时候再移除此监听函数
+
+注意这里不要用匿名函数，不好移除。
+
+```js
+    // 弹起时
+    //passive为true时，listener中不会调用preventDefault()
+    document.addEventListener('touchmove',bodyNoScroll,{passive: false})
+
+    // 收起时
+    document.removeEventListener('touchmove',bodyNoScroll);
+
+    function bodyNoScroll(e){
+		e.preventDefault();
+	}
+```
+
 ## 处理数值，为每三位数加一个逗号，兼容浮点型数值
 
 以`1234567.1234` 和 `12345678`为例

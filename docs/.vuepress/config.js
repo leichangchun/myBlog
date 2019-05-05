@@ -47,7 +47,7 @@ module.exports = {
         'js-this',
         'js-compose',
         'js-date',
-        'js-dom-css',
+        'js-dom',
         'js-deepcopy',
         'js-obj-extend',
         'js-type-judgement',
