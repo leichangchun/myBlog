@@ -2,6 +2,34 @@
 
 此页面记录一些看到过的面试题目及分析
 
+## 赋值表达式的返回值结合 this指向 的一道题目
+
+我们都知道`=`是基于右值给左值赋值的操作符。形如`a=b`。
+
+但是这个表达式的返回值是什么呢？打印一下
+
+```js
+console.log(x = 100) // 打印为：100
+```
+可见**返回值就是赋给左边的值**，那么以下问题就比较好分析了
+
+```js
+var num = 100;
+var obj = {
+    num: 200,
+    inner: {
+        num: 300,
+        print: function() {
+            console.log(this.num)
+        }
+    }
+};
+(obj.inner.print)(); // 300
+(obj.inner.print = obj.inner.print)(); // 100
+```
+`obj.inner.print = obj.inner.print`这个表达式被`()`包裹，会先执行，返回的是`function() {console.log(this.num)}`,再执行。此时就是直接调用，`this`指向`window`。
+
+
 ## 如果处理移动端滑动穿透的问题
 
 在弹框弹起的时候，为document添加touchmove的监听函数，来阻止默认的滚动行为。在弹框收起的时候再移除此监听函数
