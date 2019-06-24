@@ -2,6 +2,85 @@
 
 此页面记录一些看到过的面试题目及分析
 
+## 二进制和十进制相互转换、位运算
+
+记录下在codewar上做的一个题目和收获
+
+**128.32.10.1 == 10000000.00100000.00001010.00000001**
+
+Because the above IP address has 32 bits, we can represent it as the unsigned 32 bit number: 2149583361
+
+Complete the function that takes an unsigned 32 bit number and returns a string representation of its IPv4 address. 
+
+Example : **2149583361 ==> "128.32.10.1"**
+
+自己的解题思路是将十进制的数转为二进制（不足32位补0），然后依次取8位转化为十进制的数字，再用`.`连接即为*IP*。
+
+里面的几个点记录一下：
+
++ 十进制转换为二进制 `numObj.toString([radix])` radix可以指定进制，默认为10
+
+```js
+    let x = 2149583361;
+    x.toString(2) //  "10000000001000000000101000000001"
+```
+
++ 二进制转换为十进制 `Number.parseInt(string[, radix])` radix可以指定进制，默认为10
+```js
+   Number.parseInt("10000000001000000000101000000001",2) // 2149583361
+```
+
++ 不足32位时如何快速补`0` `Array(len + 1).join('0')`
+```js
+   let x = 998, //指定值
+       x_2 = x.toString(2),
+       len = 32 - x_2.length; // 需要补0的个数
+    
+    x_2 += Array(len + 1).join('0');
+```
+
+完整解题如下：
+
+```js
+function int32ToIp(int32){
+    let int2 = int32.toString(2),
+        len = 32 - int2.length,
+        begins = [0,8,16,24],
+        ipArr = [];
+
+    if (len) {
+        int2 += Array(len + 1).join('0')
+    }
+
+    begins.forEach((begin) => {
+        ipArr.push(Number.parseInt(int2.slice(begin,begin + 8),2))
+    })
+
+    return ipArr.join('.');
+}
+
+int32ToIp(2149583361) // '128.32.10.1'
+
+```
+
+提交之后发现其他大佬的**简洁思路**是使用 [位移运算符](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators#%E6%8C%89%E4%BD%8D%E7%A7%BB%E5%8A%A8%E6%93%8D%E4%BD%9C%E7%AC%A6)
+
+```js
+    let x = 2149583361; // 按位移动会先将操作数转换为大端字节序顺序(big-endian order)的32位整数
+    x >> 24 & 0xff // 128 //右移24位即可得到原来最左边8位，然后&运算取值
+```
+同理右移16、8、0即可取到对应的IP字段。
+
+函数如下：
+```js
+function int32ToIp(int32){
+    return `${int32 >> 24 & 0xff}.${int32 >> 16 & 0xff}.${int32 >> 8 & 0xff}.${int32 >> 0 & 0xff}`
+}
+
+int32ToIp(2149583361) // '128.32.10.1'
+```
+
+
 ## let和for循环 结合的一道题目
 
 一道题目如下，问2333秒后输出结果是什么
