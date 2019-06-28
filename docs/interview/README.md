@@ -2,6 +2,21 @@
 
 此页面记录一些看到过的面试题目及分析
 
+## ['1', '5', '11'].map(parseInt) 返回结果是什么？
+
+先执行看结果，返回`[1, NaN, 3]`而不是“预期”中的`[1,5,11]`。
+
+```js
+['1', '5', '11'].map(parseInt)
+// [1, NaN, 3]
+```
+这里需要注意的是，map的callback可以传入三个参数`callback(currentValue[, index[, array]])`。而`parseInt(string[, radix])`是可以接收两个参数的。
+
+所以会把`index`当作`parseInt`的`radix`参数传入。
+
+index=0的时候无效，所以还是默认10进制;index=1的时候为“1进制”，'5'是无效数字，所以`NaN`;index=2的时候为“2进制”，'11'是`3`
+
+
 ## 二进制和十进制相互转换、位运算
 
 记录下在codewar上做的一个题目和收获
