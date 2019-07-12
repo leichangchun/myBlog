@@ -2,6 +2,36 @@
 
 此页面记录一些看到过的面试题目及分析
 
+## 将多维数组扁平化处理
+
++ arr.flat(depth) 
+
+> flat() 方法会按照一个可指定的深度递归遍历数组，并将所有元素与遍历到的子数组中的元素合并为一个新数组返回。`depth`默认为1
+
+在不知道目标数组有多少层嵌套时，可以指定深度为一个极大值`Infinity`。
+
+```js
+    let x = [1,[2,[3,4,[5,6]]],7];
+
+    function flatDeep(arr){
+        return arr.flat(Infinity);
+    }
+
+    flatDeep(x) // [1, 2, 3, 4, 5, 6, 7]
+```
+
++ reduce和concat
+
+```js
+    function flatDeep(arr){
+        return arr.reduce((a,b) => Array.isArray(b) ? a.concat(flatDeep(b)) : a.concat(b),[]);
+    }
+
+    flatDeep(x) // [1, 2, 3, 4, 5, 6, 7]
+```
+
+
+
 ## ['1', '5', '11'].map(parseInt) 返回结果是什么？
 
 先执行看结果，返回`[1, NaN, 3]`而不是“预期”中的`[1,5,11]`。
