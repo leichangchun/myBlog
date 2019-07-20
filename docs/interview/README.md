@@ -191,7 +191,7 @@ var obj = {
 `obj.inner.print = obj.inner.print`这个表达式被`()`包裹，会先执行，返回的是`function() {console.log(this.num)}`,再执行。此时就是直接调用，`this`指向`window`。
 
 
-## 如果处理移动端滑动穿透的问题
+## 如何处理移动端滑动穿透的问题
 
 在弹框弹起的时候，为document添加touchmove的监听函数，来阻止默认的滚动行为。在弹框收起的时候再移除此监听函数
 
