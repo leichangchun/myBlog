@@ -42,8 +42,8 @@ module.exports = {
     sidebar: {
       '/jsnotes/': [
         '',
+        'js-prototype-and-chain',
         'js-react-optimization',
-        'js-object-and-prototype',
         'js-scope',
         'js-this',
         'js-compose',
