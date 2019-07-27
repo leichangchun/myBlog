@@ -43,6 +43,7 @@ module.exports = {
       '/jsnotes/': [
         '',
         'js-prototype-and-chain',
+        'js-inherit',
         'js-react-optimization',
         'js-scope',
         'js-this',

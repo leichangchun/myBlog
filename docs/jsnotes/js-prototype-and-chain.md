@@ -1,6 +1,6 @@
 # 原型和原型链
 
-在javaScript中，经常会说到原型（prototype）和原型链（prototype chain）。我曾经以为我完全理解了，但是后来总是会发现不同的地方，这次进行一次系统的整理。
+在javaScript中，经常会说到**原型**（`prototype`）和**原型链**（`prototype chain`）。我曾经以为我完全理解了，但是后来总是会发现不同的地方，这次进行一次系统的整理。
 
 ## 原型
 
@@ -29,7 +29,7 @@
  Object.getPrototypeOf(z) === obj // true
 
 ```
-可以在浏览器调试工具中打印下`Object.prototype`究竟是什么样。
+可以在浏览器调试工具中打印下`Object.prototype`究竟是什么样，会看到很多常见的方法。
 
 上面都是内置构造函数，自定义的函数也是一样
 
@@ -56,9 +56,28 @@
  x.toSting() // "[object Object]"
 
 // split继承自String.prototype
-y.split() // ["1", "2", "3"]
+y.split('') // ["1", "2", "3"]
 ```
+
 实例对象的原型中会有公共的方法，每个实例都可以访问到，这样无需再重复实现，也就是**继承**。所以JavaScript中的继承，**不是通过复制而来的，而是通过原型继承的**，而访问的过程，就是所谓的“**原型链**”了。
+
+我们可以把需要实例继承的方法定义在它的原型上。
+
+```js
+ function Test(){
+ }
+
+ Test.prototype.sayHi = function(){
+     console.log('Hi world!')
+ }
+
+ let test1 =  new Test();
+ let test2 =  new Test();
+
+ // 实例使用原型上的方法
+ test1.sayHi() // 'Hi world!'
+ test2.sayHi() // 'Hi world!'
+```
 
 ## 原型链
 
@@ -68,7 +87,7 @@ y.split() // ["1", "2", "3"]
     __proto__ 是JavaScript 的非标准属性，但许多浏览器都已实现。
 :::
 
-以上面的对象为例进行分析：对`x={a:1}`这个对象调用`toString`方法，在`x`对象中没有找到此方法，就会去`x.__proto__`指向的原型对象（也就是Object.prototype对象）中找，在Object.prototype中找到了`toString`，就调用了。如果调用`x.aa()`方法，`x`自身没有，`x.__proto__`中也没有，再往上一层`x.__proto__.__proto__`发现是`null`（Object.prototype.__proto__ === null）了，在自身和原型链中都没有找到，就会报错了。
+以上面的对象为例进行分析：对`x={a:1}`这个对象调用`toString`方法，在`x`对象中没有找到此方法，就会去`x.__proto__`指向的原型对象（也就是Object.prototype对象）中找，在Object.prototype中找到了`toString`，就调用了。如果调用`x.aa()`方法，`x`自身没有，`x.__proto__`中也没有，再往上一层`x.__proto__.__proto__`发现是`null`（`Object.prototype.__proto__ === null`）了，在自身和原型链中都没有找到，就会报错了。
 
 实例对象在创建的时候就和原型对象相关联，除了`__proto__`这个非标准属性外，可以通过以下方法访问原型对象。
 
@@ -76,12 +95,15 @@ y.split() // ["1", "2", "3"]
 + `Object.setPrototypeOf()` 方法设置一个指定的对象的原型 ( 即, 内部[[Prototype]]属性）到另一个对象或  null。
 + `isPrototypeOf()` 方法用于测试一个对象是否存在于另一个对象的原型链上。` prototypeObj.isPrototypeOf(object)`
 
-### __proto__ 和 prototype属性
+### `__proto__` 和 `prototype`属性
 
-要注意区分__proto__和prototype：
-+ __proto__是实例对象的私有属性，指向它的构造函数的prototype属性
-+ prototype是构造函数的属性，在调用构造函数创建实例对象时，实例对象通过`__proto__`和`prototype`相关联。同样的，**prototype对象中会有`__proto__`，指向它自己的原型，这样一层层链接，直到指向null，形成原型链**
-+ 函数默认有prototype属性
+要注意区分`__proto__`和`prototype`：
+
++ `__proto__`是实例对象的私有属性，指向它的构造函数的`prototype`属性
++ `prototype`是构造函数的属性，在调用构造函数创建实例对象时，实例对象通过`__proto__`和`prototype`相关联。同样的，**`prototype`对象中会有`__proto__`，指向它自己的原型，这样一层层链接，直到指向`null`，形成原型链**
++ 构造函数都是`Function`的实例
++ 函数默认有`prototype`属性，是定义公共方法的地方；`prototype`中有`constructor`属性，是指向函数本身。
+
 ```js
     // Test为构造函数
     function Test(){};
@@ -103,10 +125,14 @@ y.split() // ["1", "2", "3"]
     Date.__proto__ === Function.prototype // true
     Function.__proto__ === Function.prototype // true
     Object.__proto__ === Function.prototype // true
+
+    //constructor
+    Test.prototype.constructor === Test // true
+    x.constructor === Test // true  注意，这里用的x原型（Test.prototype中的属性）
 ```
 
-### constructor
+最后放一张网图来总结下
 
-
-
-## 
+<div class="img-center">
+    <img src="./img/prototypes.png">
+</div>
