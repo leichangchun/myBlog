@@ -44,12 +44,11 @@ module.exports = {
         '',
         'js-prototype-and-chain',
         'js-inherit',
-        'js-react-optimization',
         'js-scope',
         'js-this',
         'js-compose',
         'js-date',
-        'js-dom',
+        // 'js-dom',
         'js-deepcopy',
         'js-obj-extend',
         'js-type-judgement',
@@ -93,7 +92,8 @@ module.exports = {
         'create-react-app',
         'redux-note-createStore',
         'redux-note-combineReducers',
-        'redux-note-applyMiddleware'
+        'redux-note-applyMiddleware',
+        // 'react-optimization',
       ]
     }
   },
