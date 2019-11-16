@@ -95,6 +95,17 @@ y.split('') // ["1", "2", "3"]
 + `Object.setPrototypeOf()` 方法设置一个指定的对象的原型 ( 即, 内部[[Prototype]]属性）到另一个对象或  null。
 + `isPrototypeOf()` 方法用于测试一个对象是否存在于另一个对象的原型链上。` prototypeObj.isPrototypeOf(object)`
 
+除了`isPrototypeOf`外还可以使用`instanceof`来判断原型链关系。这两种方法都是只要原型对象出现在实例的原型链中，就会返回true。不过需要注意一个判断的原型对象，一个判断是构造函数。以上面的示例进行判断
+
+```js
+    test1 instanceof Test // true
+    test1 instanceof Object // true
+    test1 instanceof Array // false
+
+    Test.prototype.isPrototypeOf(test1) // true
+    Object.prototype.isPrototypeOf(test1) // true
+```
+
 ### `__proto__` 和 `prototype`属性
 
 要注意区分`__proto__`和`prototype`：
@@ -105,9 +116,9 @@ y.split('') // ["1", "2", "3"]
 + 函数默认有`prototype`属性，是定义公共方法的地方；`prototype`中有`constructor`属性，是指向函数本身。
 
 ```js
-    // Test为构造函数
+    // Test为构造函数，函数默认有原型对象 Test.prototype
     function Test(){};
-    // x为Test的实例对象
+    // x为Test的实例
     let x = new Test();
     
     // x的原型链为：x -> Test.prototype -> Object.prototype -> null
@@ -115,6 +126,11 @@ y.split('') // ["1", "2", "3"]
     x.__proto__.__proto__ === Object.prototype; // true
     x.__proto__.__proto__.__proto__ === null; // true
     
+    //Test.prototype中有constructor指向构造函数
+    Test.prototype.constructor === Test // true
+
+    x.constructor === Test // true  注意，这里用的是x原型（Test.prototype）中的属性
+
     // 构造函数也算是Function的实例
     // Test的原型链为：Test -> Function.prototype -> Object.prototype -> null
     Test.__proto__ === Function.prototype // true
@@ -125,11 +141,9 @@ y.split('') // ["1", "2", "3"]
     Date.__proto__ === Function.prototype // true
     Function.__proto__ === Function.prototype // true
     Object.__proto__ === Function.prototype // true
-
-    //constructor
-    Test.prototype.constructor === Test // true
-    x.constructor === Test // true  注意，这里用的x原型（Test.prototype中的属性）
 ```
+
+简单来说，就是构造函数中有prototype属性，prototype属性中有contructor字段指向构造函数，当使用构造函数创建实例时，实例中会有`__proto__`指向原型，也就是构造函数的prototype属性，这样在实例就可以访问到原型中的属性和方法。
 
 最后放一张网图来总结下
 
