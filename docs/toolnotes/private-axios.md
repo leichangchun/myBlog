@@ -4,8 +4,8 @@
 
 加入了以下功能：
 
-- 创建实例，并传入默认配置，避免影响全局的`axios`
-- 响应拦截器，统一处理特殊返回码，统一提示
+- 创建实例，并传入 **默认配置** ，避免影响全局的`axios`
+- 响应拦截器，统一 **处理特殊返回码** ，统一 **提示**
 - 快捷配置不同的`Content-Type`，并自动处理传入数据的格式
 - 统一`get`和`post`的调用方式
 
@@ -17,6 +17,9 @@ import Qs from 'qs';
 import {objToFormdata} from '../util/util';
 import store from '../store/index';
 import {changeLoginModalStatu} from '../pages/user-center/store/ActionCreator';
+
+const OK_CODE = 0;
+const NOT_LOGIN = 123456;
 
 // 提示框默认配置
 notification.config({
@@ -57,9 +60,9 @@ instance.interceptors.response.use(function (response) {
     
     if(data) { // 有数据返回时，判断code值
         let {code,msg} = data;
-        if(code !== 0) {
-            if(code === 100010110) { // 未登录的特定code
-                // 打开登录提示框
+        if(code !== OK_CODE) {
+            if(code === NOT_LOGIN) { // 未登录的特定code
+                // 打开登录引导框
                 store.dispatch(changeLoginModalStatu(true))
             } else {
                 notification.warning({
@@ -107,7 +110,7 @@ instance.interceptors.response.use(function (response) {
 
 /**
  * 发起请求
- * @param {object} configs 请求配置，除官网配置外，还有功能配置字段{needVersion:number,needFormData:boolean,needJson:boolean,loading:boolean}
+ * @param {object} configs 请求配置，除官网配置外，还有功能配置字段{needVersion:number,needFormData:boolean,needJson:boolean}
  */
 function _axios(configs){
     let _configs = cloneDeep(configs),
@@ -156,7 +159,7 @@ function _axios(configs){
  * 发起get请求
  * @param {string} url 必要 | 请求链接
  * @param {Object} data 可选 | 参数
- * @param {Object} options 可选 | 功能配置项{needVersion:number,loading:boolean}
+ * @param {Object} options 可选 | 功能配置项{needVersion:number}
  * @param {Object} configs 可选 | axios配置项，可配置内容同官网
  */
 function get(url,data = {},options = {},configs = {}) {
@@ -172,7 +175,7 @@ function get(url,data = {},options = {},configs = {}) {
  * 发起post请求
  * @param {string} url 必要 | 请求链接
  * @param {Object} data 可选 | 参数
- * @param {Object} options 可选 | 功能配置项{needVersion:number,needFormData:boolean,needJson:boolean,loading:boolean}
+ * @param {Object} options 可选 | 功能配置项{needVersion:number,needFormData:boolean,needJson:boolean}
  * @param {Object} configs 可选 | axios配置项，可配置内容同官网
  */
 function post(url,data = {},options = {},configs = {}){
