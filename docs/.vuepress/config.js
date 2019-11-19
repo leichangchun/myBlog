@@ -48,7 +48,7 @@ module.exports = {
         'js-this',
         'js-compose',
         'js-date',
-        // 'js-dom',
+        'js-dom',
         'js-deepcopy',
         'js-obj-extend',
         'js-type-judgement',
@@ -57,6 +57,7 @@ module.exports = {
         'js-travesal',
         'js-remove-arrayrepeat',
         'js-has-property',
+        'js-urlparams',
         'js-reg-lastindex'
       ],
       '/cssnotes/': [
@@ -93,7 +94,9 @@ module.exports = {
         'redux-note-createStore',
         'redux-note-combineReducers',
         'redux-note-applyMiddleware',
-        // 'react-optimization',
+        'redux-thunk',
+        'react-optimization',
+        'private-axios'
       ]
     }
   },
