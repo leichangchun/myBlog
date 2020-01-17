@@ -90,6 +90,7 @@ module.exports = {
       ],
       '/toolnotes/':[
         '',
+        'react-notes',
         'create-react-app',
         'redux-note-createStore',
         'redux-note-combineReducers',

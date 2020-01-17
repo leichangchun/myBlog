@@ -84,3 +84,14 @@
 与pointer-events属性未指定时的表现效果相同，对于SVG内容，该值与visiblePainted效果相同
 ### none
 **元素永远不会成为鼠标事件的target**。但是，当其后代元素的pointer-events属性指定其他值时，鼠标事件可以指向后代元素，在这种情况下，鼠标事件将在捕获或冒泡阶段触发父元素的事件侦听器。
+
+## text-underline-position
+
+当 `text-decoration` 属性的值设置为 `underline` 之后，可以用 `text-underline-position` 属性为其设置下划线的位置。
+
+```css
+/* 强制下划线的位置为字母基线的下方，在这个位置，下划线不会穿过任何字母，这样能确保数学方程式或者化学式的下标不会被下划线阻挡。 */
+text-underline-position: under;
+```
+![对比图](./img/text-underline-position.png)
+
