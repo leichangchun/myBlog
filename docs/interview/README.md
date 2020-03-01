@@ -2,131 +2,7 @@
 
 此页面记录一些看到过的面试题目及分析
 
-## 将多维数组扁平化处理
-
-+ arr.flat(depth) 
-
-> flat() 方法会按照一个可指定的深度递归遍历数组，并将所有元素与遍历到的子数组中的元素合并为一个新数组返回。`depth`默认为1
-
-在不知道目标数组有多少层嵌套时，可以指定深度为一个极大值`Infinity`。
-
-```js
-    let x = [1,[2,[3,4,[5,6]]],7];
-
-    function flatDeep(arr){
-        return arr.flat(Infinity);
-    }
-
-    flatDeep(x) // [1, 2, 3, 4, 5, 6, 7]
-```
-
-+ reduce和concat
-
-```js
-    function flatDeep(arr){
-        return arr.reduce((a,b) => Array.isArray(b) ? a.concat(flatDeep(b)) : a.concat(b),[]);
-    }
-
-    flatDeep(x) // [1, 2, 3, 4, 5, 6, 7]
-```
-
-
-
-## ['1', '5', '11'].map(parseInt) 返回结果是什么？
-
-先执行看结果，返回`[1, NaN, 3]`而不是“预期”中的`[1,5,11]`。
-
-```js
-['1', '5', '11'].map(parseInt)
-// [1, NaN, 3]
-```
-这里需要注意的是，map的callback可以传入三个参数`callback(currentValue[, index[, array]])`。而`parseInt(string[, radix])`是可以接收两个参数的。
-
-所以会把`index`当作`parseInt`的`radix`参数传入。
-
-index=0的时候无效，所以还是默认10进制;index=1的时候为“1进制”，'5'是无效数字，所以`NaN`;index=2的时候为“2进制”，'11'是`3`
-
-
-## 二进制和十进制相互转换、位运算
-
-记录下在codewar上做的一个题目和收获
-
-**128.32.10.1 == 10000000.00100000.00001010.00000001**
-
-Because the above IP address has 32 bits, we can represent it as the unsigned 32 bit number: 2149583361
-
-Complete the function that takes an unsigned 32 bit number and returns a string representation of its IPv4 address. 
-
-Example : **2149583361 ==> "128.32.10.1"**
-
-自己的解题思路是将十进制的数转为二进制（不足32位补0），然后依次取8位转化为十进制的数字，再用`.`连接即为*IP*。
-
-里面的几个点记录一下：
-
-+ 十进制转换为二进制 `numObj.toString([radix])` radix可以指定进制，默认为10
-
-```js
-    let x = 2149583361;
-    x.toString(2) //  "10000000001000000000101000000001"
-```
-
-+ 二进制转换为十进制 `Number.parseInt(string[, radix])` radix可以指定进制，默认为10
-```js
-   Number.parseInt("10000000001000000000101000000001",2) // 2149583361
-```
-
-+ 不足32位时如何快速补`0` `Array(len + 1).join('0')`
-```js
-   let x = 998, //指定值
-       x_2 = x.toString(2),
-       len = 32 - x_2.length; // 需要补0的个数
-    
-    x_2 += Array(len + 1).join('0');
-```
-
-完整解题如下：
-
-```js
-function int32ToIp(int32){
-    let int2 = int32.toString(2),
-        len = 32 - int2.length,
-        begins = [0,8,16,24],
-        ipArr = [];
-
-    if (len) {
-        int2 += Array(len + 1).join('0')
-    }
-
-    begins.forEach((begin) => {
-        ipArr.push(Number.parseInt(int2.slice(begin,begin + 8),2))
-    })
-
-    return ipArr.join('.');
-}
-
-int32ToIp(2149583361) // '128.32.10.1'
-
-```
-
-提交之后发现其他大佬的**简洁思路**是使用 [位移运算符](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators#%E6%8C%89%E4%BD%8D%E7%A7%BB%E5%8A%A8%E6%93%8D%E4%BD%9C%E7%AC%A6)
-
-```js
-    let x = 2149583361; // 按位移动会先将操作数转换为大端字节序顺序(big-endian order)的32位整数
-    x >> 24 & 0xff // 128 //右移24位即可得到原来最左边8位，然后&运算取值
-```
-同理右移16、8、0即可取到对应的IP字段。
-
-函数如下：
-```js
-function int32ToIp(int32){
-    return `${int32 >> 24 & 0xff}.${int32 >> 16 & 0xff}.${int32 >> 8 & 0xff}.${int32 >> 0 & 0xff}`
-}
-
-int32ToIp(2149583361) // '128.32.10.1'
-```
-
-
-## let和for循环 结合的一道题目
+## let和for循环结合的一道题目 - 作用域相关
 
 一道题目如下，问2333秒后输出结果是什么
 ```js
@@ -209,51 +85,6 @@ var obj = {
 		e.preventDefault();
 	}
 ```
-
-## 处理数值，为每三位数加一个逗号，兼容浮点型数值
-
-以`1234567.1234` 和 `12345678`为例
-
-- 通过内置方法实现
-
-```js
-    function addComma(num = 0){
-        let temps = num.toString().split('.'), //处理浮点数的情况，整数时会返回原数值
-            target = temps[0].split('').reverse(), //倒序
-            lastIndex = target.length;
-        return target.map((item,index) => { 
-                        //第三个就增加一个','，要注意最后一个数字不添加
-                        return ((index+1) % 3 === 0 && (index !== lastIndex - 1)) ? (','+ item) : item;
-                    })
-                    .reverse() //倒序回来
-                    .join('') + (temps[1] ? '.' + temps[1] : ''); //如果是浮点数，就再加上小数部分
-    }
-
-    addComma(1234567.1234) //1,234,567.1234
-    addComma(12345678)     //12,345,678
-```
-
-- 通过正则表达式
-
-```js
-    function addComma(num = 0){
-        let reg = num.toString().indexOf('.') > -1 ? /(\d)(?=(\d{3})+\.)/g : /(\d)(?=(\d{3})+$)/g;
-
-        return num.toString().replace(reg,'$1,');
-    }
-
-    addComma(1234567.1234) //1,234,567.1234
-    addComma(12345678)     //12,345,678
-```
-利用正则表达式来处理的思路：
-- 整数和浮点数是有差别的，整数从最右边开始算，浮点数要从小数点'.'开始算
-- 字符串分为两部分，右边是3*n位数字，左边的部分添加','。n = {1,}
-
-右边的部分很好匹配：`/(\d{3})+/` , 再加上开始算的符号，浮点数要加上 `\.` （`.`匹配除换行符之外的任何单个字符，加上`\.`转义，就是匹配'.'）。整数加上`$`结束符。
-
-左边的部分，必须依赖于右边的部分。比如说必须右边有三位，左边才会匹配成功，加一个','。就需要用到`?=`**正向肯定查找**(`x(?=y)`仅当x后面跟着y时才会匹配x)。`(\d)(?=y)` y就是右边的部分。
-
-**再加上全局搜索的标志 `g`，不然只会匹配一组，只加一个','**。
 
 ## typeof null === "object"的原因是什么？
 
@@ -341,46 +172,6 @@ console.log(a == 1 && a == 2 && a == 3); // true
 console.log(a) {temp:4,valueOf: f ()}
 ```
 
-## new 操作符 做了什么
-
-> new 运算符创建一个用户定义的对象类型的实例或具有构造函数的内置对象的实例。
-
-假设`Test`是一个构造函数，通常在创建对象的实例时，要使用`new`，eg:`test = new Test()` ， 那么在调用`new`的时候，发生了什么呢？
-
-步骤如下：
-1. 一个继承自 Test.prototype 的新对象被创建。可以理解为：
-```js
-    // 创建一个空对象，继承构造函数的prototype（继承公共方法）
-    let temp = {};
-    temp.__proto__ = Test.prototype
-```
-2. 使用指定的参数调用构造函数 Test ，并将 this 绑定到新创建的对象。new Test 等同于 new Test()，也就是没有指定参数列表，Test 不带任何参数调用的情况。可以理解为：
-```js
-    // 绑定this到新创建的对象，执行构造函数（创建实例的成员变量）
-    Test.call(temp)
-```
-3. 由构造函数返回的对象就是 new 表达式的结果。**如果构造函数没有显式返回一个对象，则使用步骤1创建的对象**。（一般情况下，构造函数不返回值，但是**用户可以选择主动返回对象，来覆盖正常的对象创建步骤**）
-```js
-    //默认情况下，返回最初创建的对象，也可以主动返回对象进行覆盖
-    test = temp
-```
-
-**如果主动返回的不是对象，则会被无视**，还是使用最初创建的对象
-
-```js
-    function Test() {
-        return 'test-string'
-    }
-
-    console.log(new Test()) // Test {} 返回的是空对象，为Test的实例
-```
-
-::: tip
-注意：
-1. **箭头函数不能作为构造函数**，因为箭头函数没有自己的`this`，所以不可以使用`new`，会报错！
-2. **如果构造函数在调用时，没有加`new`操作符**，执行过程中`this`会为`window/undefined`，无法正常生成实例。
-:::
-
 ## 1 == 2 == 0 为什么会返回 true ? 分析过程
 
 首先 `==`是从左到右结合的，运算结果返回`boolean`，比较的过程中允许发生类型转换。
@@ -441,7 +232,178 @@ console.log(a) {temp:4,valueOf: f ()}
 第七个 同样是执行顺序
 `new ((new Foo()).getName)()` 是以原型链上的getName为构造函数来执行，输出3
 
-## 算法题目记录 - 多维数组扁平化并去重排序
+## 算法题目记录 
+
+以下记录一些遇到过的算法题目
+
+### 将多维数组扁平化处理
+
++ arr.flat(depth) 
+
+> flat() 方法会按照一个可指定的深度递归遍历数组，并将所有元素与遍历到的子数组中的元素合并为一个新数组返回。`depth`默认为1
+
+在不知道目标数组有多少层嵌套时，可以指定深度为一个极大值`Infinity`。
+
+```js
+    let x = [1,[2,[3,4,[5,6]]],7];
+
+    function flatDeep(arr){
+        return arr.flat(Infinity);
+    }
+
+    flatDeep(x) // [1, 2, 3, 4, 5, 6, 7]
+```
+
++ reduce和concat
+
+```js
+    function flatDeep(arr){
+        return arr.reduce((a,b) => Array.isArray(b) ? a.concat(flatDeep(b)) : a.concat(b),[]);
+    }
+
+    flatDeep(x) // [1, 2, 3, 4, 5, 6, 7]
+```
+
+
+### ['1', '5', '11'].map(parseInt) 返回结果是什么？
+
+先执行看结果，返回`[1, NaN, 3]`而不是“预期”中的`[1,5,11]`。
+
+```js
+['1', '5', '11'].map(parseInt)
+// [1, NaN, 3]
+```
+这里需要注意的是，map的callback可以传入三个参数`callback(currentValue[, index[, array]])`。而`parseInt(string[, radix])`是可以接收两个参数的。
+
+所以会把`index`当作`parseInt`的`radix`参数传入。
+
+index=0的时候无效，所以还是默认10进制;index=1的时候为“1进制”，'5'是无效数字，所以`NaN`;index=2的时候为“2进制”，'11'是`3`
+
+### 二进制和十进制相互转换、位运算
+
+记录下在codewar上做的一个题目和收获
+
+**128.32.10.1 == 10000000.00100000.00001010.00000001**
+
+Because the above IP address has 32 bits, we can represent it as the unsigned 32 bit number: 2149583361
+
+Complete the function that takes an unsigned 32 bit number and returns a string representation of its IPv4 address. 
+
+Example : **2149583361 ==> "128.32.10.1"**
+
+自己的解题思路是将十进制的数转为二进制（不足32位补0），然后依次取8位转化为十进制的数字，再用`.`连接即为*IP*。
+
+里面的几个点记录一下：
+
++ 十进制转换为二进制 `numObj.toString([radix])` radix可以指定进制，默认为10
+
+```js
+    let x = 2149583361;
+    x.toString(2) //  "10000000001000000000101000000001"
+```
+
++ 二进制转换为十进制 `Number.parseInt(string[, radix])` radix可以指定进制，默认为10
+```js
+   Number.parseInt("10000000001000000000101000000001",2) // 2149583361
+```
+
++ 不足32位时如何快速补`0` `Array(len + 1).join('0')`
+```js
+   let x = 998, //指定值
+       x_2 = x.toString(2),
+       len = 32 - x_2.length; // 需要补0的个数
+    
+    x_2 += Array(len + 1).join('0');
+```
+
+完整解题如下：
+
+```js
+function int32ToIp(int32){
+    let int2 = int32.toString(2),
+        len = 32 - int2.length,
+        begins = [0,8,16,24],
+        ipArr = [];
+
+    if (len) {
+        int2 += Array(len + 1).join('0')
+    }
+
+    begins.forEach((begin) => {
+        ipArr.push(Number.parseInt(int2.slice(begin,begin + 8),2))
+    })
+
+    return ipArr.join('.');
+}
+
+int32ToIp(2149583361) // '128.32.10.1'
+
+```
+
+提交之后发现其他大佬的**简洁思路**是使用 [位移运算符](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators#%E6%8C%89%E4%BD%8D%E7%A7%BB%E5%8A%A8%E6%93%8D%E4%BD%9C%E7%AC%A6)
+
+```js
+    let x = 2149583361; // 按位移动会先将操作数转换为大端字节序顺序(big-endian order)的32位整数
+    x >> 24 & 0xff // 128 //右移24位即可得到原来最左边8位，然后&运算取值
+```
+同理右移16、8、0即可取到对应的IP字段。
+
+函数如下：
+```js
+function int32ToIp(int32){
+    return `${int32 >> 24 & 0xff}.${int32 >> 16 & 0xff}.${int32 >> 8 & 0xff}.${int32 >> 0 & 0xff}`
+}
+
+int32ToIp(2149583361) // '128.32.10.1'
+```
+
+
+### 处理数值，为每三位数加一个逗号，兼容浮点型数值
+
+以`1234567.1234` 和 `12345678`为例
+
+- 通过内置方法实现
+
+```js
+    function addComma(num = 0){
+        let temps = num.toString().split('.'), //处理浮点数的情况，整数时会返回原数值
+            target = temps[0].split('').reverse(), //倒序
+            lastIndex = target.length;
+        return target.map((item,index) => { 
+                        //第三个就增加一个','，要注意最后一个数字不添加
+                        return ((index+1) % 3 === 0 && (index !== lastIndex - 1)) ? (','+ item) : item;
+                    })
+                    .reverse() //倒序回来
+                    .join('') + (temps[1] ? '.' + temps[1] : ''); //如果是浮点数，就再加上小数部分
+    }
+
+    addComma(1234567.1234) //1,234,567.1234
+    addComma(12345678)     //12,345,678
+```
+
+- 通过正则表达式
+
+```js
+    function addComma(num = 0){
+        let reg = num.toString().indexOf('.') > -1 ? /(\d)(?=(\d{3})+\.)/g : /(\d)(?=(\d{3})+$)/g;
+
+        return num.toString().replace(reg,'$1,');
+    }
+
+    addComma(1234567.1234) //1,234,567.1234
+    addComma(12345678)     //12,345,678
+```
+利用正则表达式来处理的思路：
+- 整数和浮点数是有差别的，整数从最右边开始算，浮点数要从小数点'.'开始算
+- 字符串分为两部分，右边是3*n位数字，左边的部分添加','。n = {1,}
+
+右边的部分很好匹配：`/(\d{3})+/` , 再加上开始算的符号，浮点数要加上 `\.` （`.`匹配除换行符之外的任何单个字符，加上`\.`转义，就是匹配'.'）。整数加上`$`结束符。
+
+左边的部分，必须依赖于右边的部分。比如说必须右边有三位，左边才会匹配成功，加一个','。就需要用到`?=`**正向肯定查找**(`x(?=y)`仅当x后面跟着y时才会匹配x)。`(\d)(?=y)` y就是右边的部分。
+
+**再加上全局搜索的标志 `g`，不然只会匹配一组，只加一个','**。
+
+### 多维数组扁平化并去重排序
 
 > **已知如下数组：** 
   `var arr = [ [1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14] ] ] ], 10];`
@@ -467,7 +429,7 @@ console.log(a) {temp:4,valueOf: f ()}
     // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 ```
 
-## 定义一个函数，实现将接收的字符串用空格隔开的功能，并让字符串可以直接调用
+### 定义一个函数，实现将接收的字符串用空格隔开的功能，并让字符串可以直接调用
 
 处理字符串/数组主要考察的是字符串/数组相关方法的掌握情况。
 让字符串可以直接调用，就要注意 原型`prototype`和原型链的相关知识，将函数定义在`String`的原型上，这样所有的字符串都可以通过原型链找到该方法。
