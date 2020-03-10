@@ -2,6 +2,28 @@
 
 此页面记录一些看到过的面试题目及分析
 
+## 为什么javaScript要是单线程模型？
+
+解释和执行javaScript的线程是唯一的，同一时间上只能执行一个任务。因为JavaScript可以修改DOM结构，如果不是单线程，多段JavaScript同时修改DOM，就会出现DOM冲突。
+
+[web worker](http://www.ruanyifeng.com/blog/2018/07/web-worker.html)  可以让 JavaScript 创造多线程环境，但是 web worker 不能访问 window 对象，document 对象等。
+
+这里需要注意，JavaScript引擎是单线程，但是浏览器多进程的，它主要包括以下进程：
+
++ Browser 进程：浏览器的主进程，唯一，负责创建和销毁其它进程、网络资源的下载与管理、浏览器界面的展示、前进后退等。
++ GPU 进程：用于 3D 绘制等，最多一个。
++ 第三方插件进程：每种类型的插件对应一个进程，仅当使用该插件时才创建。
++ 浏览器渲染进程（浏览器内核）：内部是多线程的，每打开一个新网页就会创建一个进程，主要用于页面渲染，脚本执行，事件处理等。
+
+浏览器渲染进程是多线程的，其中就有JavaScript引擎线程：
++ GUI 渲染线程：负责渲染浏览器界面，当界面需要重绘（Repaint）或由于某种操作引发回流(Reflow)时，该线程就会执行。
++ JavaScript 引擎线程：也称为 JavaScript 内核，负责处理 Javascript 脚本程序、解析 Javascript 脚本、运行代码等。（例如 V8 引擎）
++ 事件触发线程：用来控制浏览器事件循环，注意这不归 JavaScript 引擎线程管，当事件被触发时，该线程会把事件添加到待处理队列的队尾，等待 JavaScript 引擎的处理。
++ 定时触发器线程：传说中的 setInterval 与 setTimeout 所在线程，注意，W3C 在 HTML 标准中规定，规定要求 setTimeout 中低于 4ms 的时间间隔算为 4ms 。
++ 异步 http 请求线程：在 XMLHttpRequest 连接后通过浏览器新开一个线程请求，将检测到状态变更时，如果设置有回调函数，异步线程就产生状态变更事件，将这个回调再放入事件队列中。再由 JavaScript 引擎执行。
+
+注意，*GUI 渲染线程与 JavaScript 引擎线程是互斥的*，当 JavaScript 引擎执行时 GUI 线程会被挂起（相当于被冻结了），GUI 更新会被保存在一个队列中等到 JavaScript 引擎空闲时立即被执行。所以如果 JavaScript 执行的时间过长，这样就会造成页面的渲染不连贯，导致页面渲染加载阻塞。
+
 ## let和for循环结合的一道题目 - 作用域相关
 
 一道题目如下，问2333秒后输出结果是什么
