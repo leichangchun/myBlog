@@ -42,6 +42,7 @@ module.exports = {
     sidebar: {
       '/jsnotes/': [
         '',
+        'js-call-apply-bind',
         'js-new',
         'js-prototype-and-chain',
         'js-inherit',
