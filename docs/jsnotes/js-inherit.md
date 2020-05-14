@@ -76,8 +76,9 @@ function A(name) {
 
 function C(name) {
     // 调用父类A的构造函数，并传入参数
+    // 此处的this为子类实例，所以会在子类实例上添加父类的属性
     A.call(this,name)
-}
+}   
 
 let c1 = new C('c1')
 let c2 = new C('c2')
@@ -115,11 +116,148 @@ let d2 = new D('d2',19)
 ```
 
 <div class="img-center">
-    <img src="./img/inherit-03.png">
+    <img src="./img/inherit-04.png">
 </div>
 
-可以传递参数，父类中的属性不会相互影响，父类原型中的方法是公用的
+可以传递参数，父类中的属性不会相互影响，是独立的，父类原型中的方法是公用的。但是有两个缺点：父类构造函数执行了两次，而且第二次执行生成实例充当之类原型时，会生成一份额外的属性（此部分属性在之类实例中已生成一份，不会被访问到）
+
+## 原型继承
+
+把已有的对象当作原型来创建构造函数，这样就可以继承到对象上的属性和方法，不用创建自定义的父类。
+
+```js
+// 要共享的数据和方法
+const obj = {
+    name:'obj',
+    tests:[0],
+    sayName:function(){
+        console.log(this.name)
+    }
+}
+
+// 原型继承的代码
+function createObject(obj) {
+    function F(){}
+    F.prototype = obj
+    return F;
+}
+
+// 生成之类和它的实例
+let E = createObject(obj),
+    e1 = new E(),
+    e2 = new E();
+```
+
+这种方式和原型链继承类似，不过不再是通过父类实例充当之类的`prototype`，而是通过已有对象。也存在共享的数据会相互影响的问题。
+
+### Object.create()
+
+这种继承方式，可以用`object.create()`实现，此方法的[详细介绍](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/create)
+```js
+let f1 = Object.create(obj),
+    f2 =  Object.create(obj);
+```
+<div class="img-center">
+    <img src="./img/inherit-05.png">
+</div>
+
+## 寄生继承
+
+在原型继承的基础上，对已有的对象进行加强，就是寄生继承。
+
+```js
+let G = createObject(obj)
+// 增强，为之类添加自定义的方法
+G.eat = function(){console.log('eat')}
+```
+
+这种方式不能复用之类的方法，每个之类都要自己有一份，和构造函数继承是类似的问题
 
 ## 寄生组合继承
 
-## class语法中的继承
+之前介绍的组合继承，最大的问题就是父类构造函数执行了两次，效率降低，而且第二次执行产生了属性/方法都是无用的。在指定子类原型时采用`寄生`的方式，不再调用第二次父类构造函数，就解决这个上述问题。
+
+```js
+// 父类
+function A(name) {
+    this.name = name
+}
+// 父类原型
+A.prototype.sayName = function(){console.log(this.name)}
+
+
+// 子类
+function H(name,age){
+    // 构造函数继承 - 为子类实例添加父类的属性
+    A.call(this,name)
+    // 子类属性
+    this.age = age
+}
+
+// 寄生继承 
+//以父类原型为基础创建一个纯净的对象，避免父类构造函数第二次调用
+H.prototype = Object.create(A.prototype)
+//进行增强，修改constructor指向 
+H.prototype.constructor = H
+
+/** 可以直接设置好constructor，上面写法只是为了强调有更改constructor这个步骤
+H.prototype = Object.create(A.prototype,{
+    constructor: { value: H, writable: true, configurable: true }
+})
+**/
+
+let h1 = new H('h1',18)
+let h2 = new H('h2',19)
+
+```
+<div class="img-center">
+    <img src="./img/inherit-06.png">
+</div>
+
+此时的实现的继承解决了组合继承的缺点，相对完美了
+
++ 可以向父类构造函数传递参数
++ 子类实例共享父类原型上的方法
++ 子类实例生成了父类和子类上的属性，不会共享
++ 父类构造函数只执行了一次，没有额外的开销，也不会生成无用的属性
+
+## 继承多个对象
+
+需要继承多个对象时，可以在子类构造函数中**执行多个父类的构造函数**，在指定子类原型时**混合多个父类原型的方法**
+
+```js
+// 父类1
+function A(name) {
+    this.nameA = name + ' in A'
+}
+// 父类原型1
+A.prototype.sayNameA = function(){console.log(this.nameA)}
+
+// 父类2
+function B(name) {
+    this.nameB = name + ' in B'
+}
+// 父类原型2
+B.prototype.sayNameB= function(){console.log(this.nameB)}
+
+
+function I(name,age) {
+    // 执行多个父类的构造函数添加属性
+    A.call(this,name)
+    B.call(this,name)
+    this.age = age
+}
+
+I.prototype = Object.create(A.prototype)
+// 混合父类的原型
+Object.assign(I.prototype,B.prototype)
+
+I.prototype.constructor = I
+
+let i1 = new I('i1',18)
+let i2 = new I('i2',19)
+```
+
+<div class="img-center">
+    <img src="./img/inherit-07.png">
+</div>
