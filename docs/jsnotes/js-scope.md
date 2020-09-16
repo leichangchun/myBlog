@@ -98,6 +98,35 @@ JavaScript 引擎会在编译阶段进行数项的**性能优化**。其中有�
     foo(); //foo2 执行赋值之后，foo函数输出foo2
 ```
 
+3. let 和 const 不会变量提升
+
+let 和 const 所声明的变量一定要在声明后使用，否则报错
+
+```js
+    console.log(a); // ReferenceError
+    console.log(b); // ReferenceError
+
+    let a = 1;
+    const b = 2;
+```
+
+4. let 和 const 有暂时性死区
+
+ES6 明确规定，如果区块中存在let和const命令，这个区块对这些命令声明的变量，从一开始就形成了封闭作用域。凡是在声明之前就使用这些变量，就会报错。
+
+总之，在代码块内，使用let命令声明变量之前，该变量都是不可用的。这在语法上，称为“暂时性死区”（temporal dead zone，简称 TDZ）。
+
+```js
+
+var tmp = 123;
+
+if (true) {
+  tmp = 'abc'; // ReferenceError
+  let tmp;
+}
+
+```
+
 ## 闭包
 
 闭包是基于**词法作用域**写代码时所产生的自然结果，闭包的创建和使用在代码中随处可见，我们需要的是根据自己的意愿来识别，拥抱和影响闭包的思维环境。
